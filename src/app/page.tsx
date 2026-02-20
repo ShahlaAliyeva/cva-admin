@@ -1,40 +1,42 @@
 "use client";
 
-import { Input } from "@/src/components/ui/input/input";
-import { Label } from "@/src/components/ui/label/label";
-import { Button } from "@/src/components/ui/button/button";
 import { useState } from "react";
+import { Button } from "@/src/components/ui/button/button";
+import { Input } from "@/src/components/ui/input/input";
+
+import { FormField } from "@/src/components/ui/form/form";
+import { FormLabel } from "@/src/components/ui/form/form-label";
+import { FormControl } from "@/src/components/ui/form/form-control";
+import { FormMessage } from "@/src/components/ui/form/form-message";
 
 export default function Page() {
   const [value, setValue] = useState("");
 
-  const isError = value.length > 0 && value.length < 3;
+  const error =
+    value.length > 0 && value.length < 3
+      ? "Name must be at least 3 characters."
+      : undefined;
 
   return (
-    <main className="min-h-screen bg-background text-foreground flex items-center justify-center">
-      <div className="bg-card p-8 rounded-lg shadow-sm w-96 space-y-6 border border-border/20">
-        <h2 className="text-lg font-semibold">Create Account</h2>
-        <p className="text-sm text-muted-foreground">
-          Enter your details below
-        </p>
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            placeholder="Enter your name"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            variant={isError ? "error" : "default"}
-          />
-          {isError && (
-            <p className="text-sm text-red-500 mt-1.5 space-y-3">
-              Name must be at least 3 characters.
-            </p>
-          )}
-        </div>
+    <main className="min-h-screen flex items-center justify-center bg-background">
+      <div className="bg-card border border-border/30 shadow-md rounded-lg p-8 w-96 space-y-6">
+        
+        <FormField error={error}>
+          <FormLabel htmlFor="name">Name</FormLabel>
 
-        <Button disabled={isError}>Submit</Button>
+          <FormControl>
+            <Input
+              id="name"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Enter your name"
+            />
+          </FormControl>
 
+          <FormMessage />
+        </FormField>
+
+        <Button disabled={!!error}>Submit</Button>
       </div>
     </main>
   );
